@@ -1,10 +1,13 @@
 library(shiny)
+library(dplyr)
+
 source("Data.R")
+
   server <- function(input, output) {
-    filtered <- reactive({
+    month.data <- reactive({
       result <- data.2017
       if(input$type != "All") {
-        result <- select(by.types, input$type)
+        result <- filter(data.2017, Event.Clearance.Group == input$type)
       }
       Filter.Month.Count.Perday <- function(mo) {
         data.month <- filter(result, Event.Clearance.Date >= month.start[mo] &
@@ -14,8 +17,30 @@ source("Data.R")
       Count.Per.Day <- sapply(1:12,Filter.Month.Count.Perday)
       df.part1 <- data.frame(month.name, Count.Per.Day,
                              stringsAsFactors = FALSE)
-      output$table <- renderTable(df.part1)
-      output$texts <- renderText("AAA")
+      
       
     })
+    
+    output$text1 <- renderText({
+      month.data.type <- month.data()
+      mean<-format(round(mean(month.data.type$Count.Per.Day), 2), nsmall = 2)
+      
+      max <- max(month.data.type$Count.Per.Day)
+      max.month <- filter(month.data.type, Count.Per.Day == max)[1,1]
+      paste("During 2017, the average calls per day for", input$type, "is",
+            mean, "calls per day.
+            The maxium average calls per day is ", 
+            format(round(max, 2), nsmall = 2), "on ",max.month, "." )
+    })
+    output$plot <- renderPlot({
+      month.avg.data <- month.data()
+      month.avg.data$month.name <-factor(month.avg.data$month.name, 
+                             levels = month.name)
+      ggplot(data = month.avg.data, aes(month.name, Count.Per.Day, group = 1))+
+        geom_col(fill = "#2b8cbe") + geom_line(color = "red", size=1.5)
+    })
+    output$table<- renderTable({
+      month.data()
+    })
+    
   }
