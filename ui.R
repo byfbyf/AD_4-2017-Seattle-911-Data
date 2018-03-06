@@ -2,7 +2,7 @@ library(shiny)
 ui <- fluidPage(
   titlePanel("Seattle 911 Data of 2017"),
   tabsetPanel(type = "tabs",
-    tabPanel("Intro"),
+    tabPanel("Intro", textOutput("intro")),
     tabPanel("Monthly Average Call", 
              sidebarLayout(
                sidebarPanel(
@@ -33,15 +33,15 @@ ui <- fluidPage(
                                          "Prostitution","Public gatherings","Drive by (no injury)",              
                                          "Other vice","Reckless burning","Homicide",                            
                                          "Vice calls"),
-                             selected = "All"),
-                 textOutput("text1")
-               ),
+                             selected = "All")               ),
                mainPanel(
-                 plotOutput("plot")
+                 plotOutput("plot"),
+                 textOutput("text1")
+                 
                )
                )
              ),
-    tabPanel("Part 2 here" ),
+    tabPanel("Part 2 here"),
     tabPanel("Part 3 herer")
   
   

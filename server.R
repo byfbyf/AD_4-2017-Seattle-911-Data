@@ -4,6 +4,16 @@ library(dplyr)
 source("Data.R")
 
   server <- function(input, output) {
+    output$intro <- renderText({
+      paste0("Our project is about the dataset of Seattle's 911
+             data from year 2017. There are ", nrow(data.2017), " calls
+             in total. And the most common subject of the calls is traffic 
+             related calls. In our project, we will display the average 
+             daily call numbers regarding various topics for different monthes
+             in the year. We would also display a map of locations of phone
+             call using leaflet in part 2. For part 3, we will show 
+             type of calls in different areas.")
+    })
     month.data <- reactive({
       result <- data.2017
       if(input$type != "All") {
