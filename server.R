@@ -1,19 +1,26 @@
 library(shiny)
 library(dplyr)
-
+library(ggplot2)
 source("Data.R")
 
   server <- function(input, output) {
-    output$intro <- renderText({
-      paste0("Our project is about the dataset of Seattle's 911
-             data from year 2017. There are ", nrow(data.2017), " calls
-             in total. And the most common subject of the calls is traffic 
-             related calls. In our project, we will display the average 
-             daily call numbers regarding various topics for different monthes
-             in the year. We would also display a map of locations of phone
-             call using leaflet in part 2. For part 3, we will show 
-             type of calls in different areas.")
+    #Intro
+    output$intro <- renderUI({
+      
+      text <-paste0("<p>Our project is about the dataset of Seattle's 911
+             data from year 2017. There are <b>", nrow(data.2017), "</b> calls
+             in total. And the most common subject of the calls is <b>traffic 
+             related calls</b>.</p> <p>In our project, we will have three sections:
+            <li>Part 1 displays the average  daily call numbers regarding various topics 
+            for different months in the year 2017. </li>
+             <li> Part 2 display a map where officials responds
+              to the call at secene using leaflet.</li>
+             <li>Part 3 shows 
+             type of calls in different areas.</li> </p>")
+      HTML(text)
     })
+    
+    #Returns Month - Count datafram for selected type of call.
     month.data <- reactive({
       result <- data.2017
       if(input$type != "All") {
@@ -31,6 +38,7 @@ source("Data.R")
       
     })
     
+    #Shows the average per day of the year and the maxium among the 12 month
     output$text1 <- renderText({
       month.data.type <- month.data()
       mean<-format(round(mean(month.data.type$Count.Per.Day), 2), nsmall = 2)
@@ -42,7 +50,9 @@ source("Data.R")
             The maxium average calls per day is ", 
             format(round(max, 2), nsmall = 2), " on ",max.month, "." )
     })
-    output$plot <- renderPlot({
+    
+    #Bar chart and line for the count of average daily calls
+    output$plot1 <- renderPlot({
       month.avg.data <- month.data()
       month.avg.data$month.name <-factor(month.avg.data$month.name, 
                              levels = month.name)
@@ -53,8 +63,5 @@ source("Data.R")
         labs(x="Month", y="Average Daily Call")
       
     })
-    output$table<- renderTable({
-      month.data()
-    })
-    
+
   }

@@ -2,7 +2,7 @@ library(shiny)
 ui <- fluidPage(
   titlePanel("Seattle 911 Data of 2017"),
   tabsetPanel(type = "tabs",
-    tabPanel("Intro", textOutput("intro")),
+    tabPanel("Intro", htmlOutput("intro")),
     tabPanel("Monthly Average Call", 
              sidebarLayout(
                sidebarPanel(
@@ -35,18 +35,14 @@ ui <- fluidPage(
                                          "Vice calls"),
                              selected = "All")               ),
                mainPanel(
-                 plotOutput("plot"),
+                 plotOutput("plot1"),
                  textOutput("text1")
                  
                )
                )
              ),
-    tabPanel("Part 2 here"),
-    tabPanel("Part 3 herer")
-  
-  
-
-   
+    tabPanel("Where and When are the Officers Present at Scence?"),
+    tabPanel("Call Types in Different Areas")
   )
 )
 
