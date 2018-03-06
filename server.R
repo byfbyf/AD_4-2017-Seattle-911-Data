@@ -27,17 +27,21 @@ source("Data.R")
       
       max <- max(month.data.type$Count.Per.Day)
       max.month <- filter(month.data.type, Count.Per.Day == max)[1,1]
-      paste("During 2017, the average calls per day for", input$type, "is",
-            mean, "calls per day.
+      paste0("During 2017, the average calls per day for ", input$type, " is ",
+            mean, ".
             The maxium average calls per day is ", 
-            format(round(max, 2), nsmall = 2), "on ",max.month, "." )
+            format(round(max, 2), nsmall = 2), " on ",max.month, "." )
     })
     output$plot <- renderPlot({
       month.avg.data <- month.data()
       month.avg.data$month.name <-factor(month.avg.data$month.name, 
                              levels = month.name)
       ggplot(data = month.avg.data, aes(month.name, Count.Per.Day, group = 1))+
-        geom_col(fill = "#2b8cbe") + geom_line(color = "red", size=1.5)
+        geom_col(fill = "#2b8cbe") + geom_line(color = "red", size=1.5) +
+        ggtitle("Average Daily Call #") + 
+        theme(plot.title = element_text(hjust = 0.5))+ 
+        labs(x="Month", y="Average Daily Call")
+      
     })
     output$table<- renderTable({
       month.data()
