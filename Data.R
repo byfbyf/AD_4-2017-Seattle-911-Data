@@ -6,7 +6,7 @@ library(maps)
 library(shiny)
 # data.2017 <-read.csv("./2017_Seattle_911.csv", stringsAsFactors = FALSE)
 # data.2017 <- select(data.2017, CAD.CDW.ID, Event.Clearance.Date,Event.Clearance.Group,Event.Clearance.Description,
-#                     Event.Clearance.SubGroup, District.Sector, Hundred.Block.Location, Longitude,
+#                      District.Sector, Hundred.Block.Location, Longitude,
 #                     Latitude, At.Scene.Time)
 # ChangeCase <- function(x) {
 #   paste0(substring(x,1,1), tolower(substring(x, 2)))
