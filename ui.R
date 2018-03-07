@@ -4,7 +4,7 @@ library(dplyr)
 library(ggplot2)
 
 ui <- fluidPage(
-  titlePanel("Seattle 911 Data of 2017"),
+  h2("2017 Seattle 911 Events Map"),
   tabsetPanel(type = "tabs",
     tabPanel("Intro", htmlOutput("intro")),
     tabPanel("Monthly Average Call", 
@@ -42,13 +42,31 @@ ui <- fluidPage(
                  plotOutput("plot1"),
                  textOutput("text1")
                  
-               )
+                                )
                )
              ),
-    tabPanel("Where and When are the Officers Present at Scence?",
-             leafletOutput("leaflet")),
-    tabPanel("Call Types in Different Areas")
-  )
+    tabPanel("Where and When are Officers at Scene",
+             sidebarLayout(
+               sidebarPanel(
+                 dateRangeInput("date", "Date in 2017: ", 
+                                start = "2017-1-1",
+                                end = "2017-1-31",
+                                min = "2017-1-1",
+                                max = "2017-12-31",
+                                format = "mm/dd/yy"),
+                 sliderInput("time", "Time Range: ",
+                             0, 24, c(0, 24), 1, 
+                             round = FALSE)
+               ),
+               mainPanel(
+                 h3("2017 Seattle 911 at Scene Events Map"),
+                 textOutput("text"),
+                 leafletOutput("map", width = 1000, height = 600)
+               )
+             )
+    ),
+  tabPanel("Call Types in Different Areas")
+)
 )
 
 shinyUI(ui)

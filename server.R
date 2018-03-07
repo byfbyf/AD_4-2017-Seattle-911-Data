@@ -3,8 +3,21 @@ library(dplyr)
 library(ggplot2)
 library(leaflet)
 library(stringr)
-source("Data.R")
+library(lubridate)
+data.2017 <-read.csv("./2017_Seattle_911_processed.csv", stringsAsFactors = FALSE)
 
+data.2017$Event.Clearance.Date <-as_datetime(data.2017$Event.Clearance.Date)
+
+
+data.2017$Event.Clearance.Date <-as.POSIXct(data.2017$Event.Clearance.Date)
+
+month.start <- c(paste0("2017-", 1:12, "-01"), "2018-01-01")
+
+at.scene <- str_split_fixed(data.2017$At.Scene.Time, " ", 2)
+
+data.2017 <-  data.2017 %>%
+  mutate(At.Scene.Date = as.Date(at.scene[, 1], "%m/%d/%Y"),
+         At.Scene.Time = at.scene[, 2])
 server <- function(input, output) {
   #Intro
   output$intro <- renderUI({
@@ -66,42 +79,41 @@ server <- function(input, output) {
     
   })
   
-  output$leaflet <- renderLeaflet({
-    leaflet() %>%
-      addTiles() %>% 
-      addMarkers(lng=-122.31004, lat=47.65666, popup="ODE!")
-    
-  })
   hourTime <- function(hour) {
     if(hour < 10) {
       return(paste0("0", hour))
     }
     return(hour)
   }
-  at.scene <- str_split_fixed(data.2017$At.Scene.Time, " ", 2)
   
-  data.2017 <-  data.2017 %>%
-    mutate(At.Scene.Date = as.Date(at.scene[, 1], "%m/%d/%Y"),
-           At.Scene.Time = at.scene[, 2])
-  
+  # Filter data with selected date and time
   data <- reactive({
-    data.2017 <- data.2017 %>%
-      filter(data.2017$At.Scene.Date >= input$date[1]
+    data.2017 <- data.2017 %>% 
+      filter(data.2017$At.Scene.Date >= input$date[1] 
              & data.2017$At.Scene.Date <= input$date[2]
              & data.2017$At.Scene.Time >= paste0(hourTime(input$time[1]), ":00")
              & data.2017$At.Scene.Time <= paste0(hourTime(input$time[2]), ":00"))
-    return(short)
+    return(data.2017)
   })
   
-  output$text2 <- renderText({
-    paste(input$time[1],
-          input$time[2],
-          paste0(hourTime(input$time[1]), ":00"),
-          paste0(hourTime(input$time[2]), ":00"),
-          as.character(input$date[1]),
-          as.character(input$date[2]),
-          nrow(data()))
+  # Render description
+  output$text <- renderText({
+    description <- paste0("This map shows officers at sencen for the 911 calls
+                          in Seattle during ", input$date[1],
+                          " and ", input$date[2], " with the officer at scene
+                          time from ",
+                          paste0(hourTime(input$time[1]), ":00"), " to ", 
+                          paste0(hourTime(input$time[2]), ":00"), ". \n")
+    return(description)
   })
   
+  # Render map
+  output$map <- renderLeaflet({
+    map <- leaflet() %>%
+      addTiles() %>%
+      addCircleMarkers(lng=data()$Longitude, lat=data()$Latitude, radius = 5, 
+                       color = "black", popup = data()$Event.Clearance.Description,
+                       clusterOptions = markerClusterOptions())
+  })
 }
 shinyUI(server)

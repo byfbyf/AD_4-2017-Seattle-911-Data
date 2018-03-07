@@ -1,7 +1,6 @@
 
 library(dplyr)
 library(tools)
-library(lubridate)
 library(maps)
 library(shiny)
 # data.2017 <-read.csv("./2017_Seattle_911.csv", stringsAsFactors = FALSE)
@@ -11,7 +10,7 @@ library(shiny)
 # ChangeCase <- function(x) {
 #   paste0(substring(x,1,1), tolower(substring(x, 2)))
 # }
-#
+# 
 # data.2017$Event.Clearance.Group <- sapply(data.2017$Event.Clearance.Group, ChangeCase)
 # data.2017$Event.Clearance.Description <- sapply(data.2017$Event.Clearance.Description, ChangeCase)
 # 
