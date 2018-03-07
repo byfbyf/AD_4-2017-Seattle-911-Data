@@ -1,4 +1,5 @@
 library(shiny)
+library(leaflet)
 
 ui <- fluidPage(
   h1("Seattle 911 Data of 2017"),
@@ -20,7 +21,7 @@ ui <- fluidPage(
                mainPanel(
                  h2("2017 Seattle 911 Events Map"),
                  textOutput("text"),
-                 leafletOutput("map")
+                 leafletOutput("map", width = "100%", height = "100%")
                )
             )
             )

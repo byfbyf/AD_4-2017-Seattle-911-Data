@@ -45,7 +45,7 @@ server <- function(input, output) {
     map <- leaflet() %>%
       addTiles() %>%
       addCircleMarkers(lng=data()$Longitude, lat=data()$Latitude, radius = 5, 
-                       color = "black", popup = short$Event.Clearance.Description,
+                       color = "black", popup = data.911$Event.Clearance.Description,
                        clusterOptions = markerClusterOptions())
   })
 }
