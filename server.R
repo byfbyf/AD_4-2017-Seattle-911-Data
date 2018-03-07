@@ -17,7 +17,8 @@ at.scene <- str_split_fixed(data.2017$At.Scene.Time, " ", 2)
 
 data.2017 <-  data.2017 %>%
   mutate(At.Scene.Date = as.Date(at.scene[, 1], "%m/%d/%Y"),
-         At.Scene.Time = at.scene[, 2])
+         At.Scene.Time = format(strptime(at.scene[, 2], "%I:%M:%S %p"), 
+                                format="%H:%M"))
 server <- function(input, output) {
   #Intro
   output$intro <- renderUI({
