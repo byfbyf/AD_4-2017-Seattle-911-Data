@@ -38,7 +38,7 @@ my.ui <- fluidPage (
       plotOutput('pie'),
       
       h4('District Map of Seattle'),
-      p('This map shows corresponding district areas of Seattle'),
+      p('This map shows corresponding district areas of Seattle.'),
       img(src = 'map.jpg')
     )
   )
