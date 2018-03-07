@@ -1,4 +1,8 @@
 library(shiny)
+library(leaflet)
+library(dplyr)
+library(ggplot2)
+
 ui <- fluidPage(
   titlePanel("Seattle 911 Data of 2017"),
   tabsetPanel(type = "tabs",
@@ -41,7 +45,8 @@ ui <- fluidPage(
                )
                )
              ),
-    tabPanel("Where and When are the Officers Present at Scence?"),
+    tabPanel("Where and When are the Officers Present at Scence?",
+             leafletOutput("leaflet")),
     tabPanel("Call Types in Different Areas")
   )
 )

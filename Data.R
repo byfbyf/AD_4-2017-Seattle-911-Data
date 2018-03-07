@@ -11,8 +11,10 @@ library(shiny)
 # ChangeCase <- function(x) {
 #   paste0(substring(x,1,1), tolower(substring(x, 2)))
 # }
-# 
+#
 # data.2017$Event.Clearance.Group <- sapply(data.2017$Event.Clearance.Group, ChangeCase)
+# data.2017$Event.Clearance.Description <- sapply(data.2017$Event.Clearance.Description, ChangeCase)
+# 
 # write.csv(data.2017, "2017_Seattle_911_processed.csv")
 data.2017 <-read.csv("./2017_Seattle_911_processed.csv", stringsAsFactors = FALSE)
 
