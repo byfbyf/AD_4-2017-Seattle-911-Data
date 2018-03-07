@@ -10,7 +10,7 @@ ui <- fluidPage(
                sidebarPanel(
                  dateRangeInput("date", "Date in 2017: ", 
                                 start = "2017-1-1",
-                                end = "2017-1-31",
+                                end = "2017-1-2",
                                 min = "2017-1-1",
                                 max = "2017-12-31",
                                 format = "mm/dd/yy"),
@@ -21,7 +21,7 @@ ui <- fluidPage(
                mainPanel(
                  h2("2017 Seattle 911 Events Map"),
                  textOutput("text"),
-                 leafletOutput("map", width = "100%", height = "100%")
+                 leafletOutput("map", width = 1000, height = 600)
                )
             )
             )
