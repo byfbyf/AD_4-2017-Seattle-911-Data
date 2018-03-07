@@ -1,7 +1,7 @@
 library(shiny)
 
 ui <- fluidPage(
-  titlePanel("Seattle 911 Data of 2017"),
+  h1("Seattle 911 Data of 2017"),
   
   tabsetPanel(
     tabPanel("Map",
@@ -9,7 +9,7 @@ ui <- fluidPage(
                sidebarPanel(
                  dateRangeInput("date", "Date in 2017: ", 
                                 start = "2017-1-1",
-                                end = "2017-12-31",
+                                end = "2017-1-31",
                                 min = "2017-1-1",
                                 max = "2017-12-31",
                                 format = "mm/dd/yy"),
@@ -18,11 +18,9 @@ ui <- fluidPage(
                              round = FALSE)
                ),
                mainPanel(
-                 
+                 h2("2017 Seattle 911 Events Map"),
                  textOutput("text"),
-                 #plotOutput("map")
                  leafletOutput("map")
-                 
                )
             )
             )
