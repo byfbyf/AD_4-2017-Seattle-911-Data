@@ -4,6 +4,9 @@ library(ggplot2)
 library(leaflet)
 library(stringr)
 library(lubridate)
+library(plotly)
+library(ggrepel)
+
 data.2017 <-read.csv("./2017_Seattle_911_processed.csv", stringsAsFactors = FALSE)
 
 data.2017$Event.Clearance.Date <-as_datetime(data.2017$Event.Clearance.Date)
@@ -117,6 +120,8 @@ server <- function(input, output) {
                        clusterOptions = markerClusterOptions())
   })
   
+  
+  # select data in a specific area
   location <- reactive ({
     loc <- filter(data.2017, District.Sector == input$area) %>%
       group_by(Event.Clearance.Group) %>%
@@ -136,7 +141,7 @@ server <- function(input, output) {
     
   })
   
-  
+  #render table of information
   output$info <- renderTable ({
     location()
   })
@@ -150,19 +155,32 @@ server <- function(input, output) {
     
   })
   
-  output$pie <- renderPlot({
-    blank_theme <- theme_minimal()+
-      theme(
-        axis.title.x = element_blank(),
-        axis.title.y = element_blank(),
-        panel.border = element_blank(),
-        panel.grid=element_blank(),
-        axis.ticks = element_blank(),
-        plot.title=element_text(size=14, face="bold")
-      )
-    ggplot(location(), aes(x="", y= frequency, fill = Event.Clearance.Group))+
-      geom_bar(width = 1, stat = 'identity') + coord_polar("y", start=0) +
-      scale_fill_brewer(palette = "Set2") + theme(axis.text.x=element_blank()) + blank_theme
-  })
+  output$pie <- renderPlotly({
+    # blank_theme <- theme_minimal()+
+    #   theme(
+    #     axis.title.x = element_blank(),
+    #     axis.title.y = element_blank(),
+    #     panel.border = element_blank(),
+    #     panel.grid=element_blank(),
+    #     axis.ticks = element_blank(),
+    #     plot.title=element_text(size=14, face="bold")
+    #   )
+
+    
+     plot_ly(location(), labels = ~Event.Clearance.Group, values = ~frequency, type = 'pie',
+                 textposition = 'inside',
+                 textinfo = 'label+percent',
+                 insidetextfont = list(color = '#FFFFFF'),
+                 hoverinfo = 'text',
+                 text = ~paste(frequency, ' times'),
+                 marker = list(#colors = colors,
+                               line = list(color = '#FFFFFF', width = 1)),
+                 #The 'pull' attribute can also be used to create space between the sectors
+                 showlegend = FALSE) %>%
+      layout(title = 'Percentage of types of incidents in a district',
+             xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+             yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+    
+   })
 }
 shinyUI(server)

@@ -89,9 +89,10 @@ ui <- fluidPage(
             
             h4('Total frequency'),
             textOutput('total'),
+            hr(),
+            plotlyOutput('pie'),
+            p('The pie chart shows the percentage of each type of accidents happened in this area')
             
-            p('The pie chart shows the percentage of each type of accidents happened in this area'),
-            plotOutput('pie')
             )
   )
 )
