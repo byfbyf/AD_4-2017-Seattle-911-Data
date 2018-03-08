@@ -97,7 +97,7 @@ ui <- fluidPage(
                          helpText(class = "text", 'Districts of seattle. Select one and see relevant data in that district in 2017!'),
                          h3('District Map of Seattle'),
                          p(class = "text", 'This map shows corresponding district areas of Seattle'),
-                         img(src = 'map.jpg')),
+                         img(id = "map", src = 'map.jpg')),
                        mainPanel (
                          h2('Call Types in Different Areas'),
                          

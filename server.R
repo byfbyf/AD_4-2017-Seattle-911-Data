@@ -61,8 +61,6 @@ server <- function(input, output) {
     Count.Per.Day <- sapply(1:12,Filter.Month.Count.Perday)
     df.part1 <- data.frame(month.name, Count.Per.Day,
                            stringsAsFactors = FALSE)
-    
-    
   })
   
   #Description of Part 1 selector
@@ -145,7 +143,7 @@ server <- function(input, output) {
     return(description)
   })
   
-  #Icon 
+  # Make Leaf Icon 
   greenLeafIcon <- makeIcon(
     iconUrl = "http://leafletjs.com/examples/custom-icons/leaf-green.png",
     iconWidth = 38, iconHeight = 95,

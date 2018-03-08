@@ -1,6 +1,7 @@
 h1 {
   text-align: center;
-  font-family: 'Lobster', cursive;
+  font-family: 'Georgia', cursive;
+  font-weight: bold;
   color: DarkBlue;
   font-size: 30pt;
 }
@@ -41,4 +42,8 @@ span {
 
 h4 {
   text-align: right;
+}
+
+#map {
+  width: 90%;
 }
