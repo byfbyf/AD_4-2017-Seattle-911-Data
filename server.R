@@ -7,18 +7,19 @@ library(lubridate)
 library(plotly)
 library(ggrepel)
 library(zipcode)
-
+#read the data
 data.2017 <-read.csv("./2017_Seattle_911_processed.csv", stringsAsFactors = FALSE)
-
+#Set as time and date
 data.2017$Event.Clearance.Date <-as_datetime(data.2017$Event.Clearance.Date)
 
 
 data.2017$Event.Clearance.Date <-as.POSIXct(data.2017$Event.Clearance.Date)
-
+#Date of start of the month
 month.start <- c(paste0("2017-", 1:12, "-01"), "2018-01-01")
 
 at.scene <- str_split_fixed(data.2017$At.Scene.Time, " ", 2)
 
+#add columns of at scence time and date
 data.2017 <-  data.2017 %>%
   mutate(At.Scene.Date = as.Date(at.scene[, 1], "%m/%d/%Y"),
          At.Scene.Time = format(strptime(at.scene[, 2], "%I:%M:%S %p"), 
@@ -26,6 +27,7 @@ data.2017 <-  data.2017 %>%
 
 data("zipcode")
 
+#filter out the zip code of Seattle city
 seattle.zipcode <- filter(zipcode, city == "Seattle")
 
 server <- function(input, output) {
@@ -63,6 +65,7 @@ server <- function(input, output) {
     
   })
   
+  #Description of Part 1 selector
   output$text1 <- renderText({
     text <- "There are many different subjects of calls. Choose one you are interested in 
     to see how many calls per day in each month regarding this topic."
@@ -115,16 +118,17 @@ server <- function(input, output) {
     return(data.2017)
   })
   
+  #Users input of zip code
   zip <- reactive({
     zipcode <- zipcode %>% 
       filter(zip == input$zipcode)
   })
-  
+  #Instruction
   output$instruction <- renderUI({
     str1 <- "You can view 911 police at scene place of any 
                              date period in 2017 by selecting the time of interest."
     str2 <- "Sliding the slide bar, you can view 911 police 
-                             at scene events happende in the time period of interest."
+                             at scene events happened in the time period of interest."
     str3 <- "You can also text a zipcode to add a marker 
                              at the area of your interest. The default vaule is 98105."
     HTML(paste(str1, str2, str3, sep = '<br/>'))
@@ -141,7 +145,7 @@ server <- function(input, output) {
     return(description)
   })
   
-  
+  #Icon 
   greenLeafIcon <- makeIcon(
     iconUrl = "http://leafletjs.com/examples/custom-icons/leaf-green.png",
     iconWidth = 38, iconHeight = 95,
@@ -186,6 +190,7 @@ server <- function(input, output) {
     location()
   })
   
+  #Total number of calls in the area
   output$total <- renderPrint ({
     t <- filter(data.2017, District.Sector == input$area) %>%
       group_by(Event.Clearance.Group) %>%
@@ -195,6 +200,7 @@ server <- function(input, output) {
     
   })
   
+  #output pie chart with plotyly
   output$pie <- renderPlotly({
      plot_ly(location(), labels = ~Event.Clearance.Group, values = ~frequency, type = 'pie',
                  textposition = 'inside',

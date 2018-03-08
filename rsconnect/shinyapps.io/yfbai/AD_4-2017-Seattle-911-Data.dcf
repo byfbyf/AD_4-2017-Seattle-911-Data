@@ -5,8 +5,8 @@ account: yfbai
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 295320
-bundleId: 1257773
+bundleId: 1258617
 url: https://yfbai.shinyapps.io/AD_4-2017-Seattle-911-Data/
-when: 1520459326.33326
+when: 1520493723.09752
 asMultiple: FALSE
 asStatic: FALSE
