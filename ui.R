@@ -2,6 +2,7 @@ library(shiny)
 library(leaflet)
 library(dplyr)
 library(ggplot2)
+library(plotly)
 
 ui <- fluidPage(
   h1("2017 Seattle 911 Calls"),
